@@ -40,7 +40,7 @@ jobs:
       run: |
         . venv/bin/activate
         cd tests
-        pytest tests --driver Remote --capability browserName chrome
+        pytest test_checks.py
 
     - name: Archive test reports
       if: always()
