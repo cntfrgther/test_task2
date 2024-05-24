@@ -4,13 +4,10 @@ import csv
 from selenium import webdriver
 from src.main_page import MainPage
 from src.contacts_page import ContactsPage
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 @pytest.fixture(scope="module")
 def driver():
-    selenium_url = "http://localhost:4444/wd/hub"
-    capabilities = DesiredCapabilities.CHROME.copy()
-    driver = webdriver.Remote(command_executor=selenium_url, desired_capabilities=capabilities)
+    driver = webdriver.Firefox()
     yield driver
     driver.quit()
 
