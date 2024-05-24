@@ -1,4 +1,4 @@
-name: Run Tests
+name: Run Selenium Tests
 
 on:
   push:
@@ -12,23 +12,40 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      xvfb:
+        image: selenium/standalone-firefox:latest
+        ports:
+          - 4444:4444
+        options: >-
+          --shm-size 2g
+          --detach-keys="ctrl-d"
+
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.8'
+        python-version: 3.9
 
     - name: Install dependencies
       run: |
         python -m venv venv
-        source venv/bin/activate
+        . venv/bin/activate
+        pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests
+    - name: Run tests with pytest
       run: |
-        source venv/bin/activate
+        . venv/bin/activate
         cd tests
-        pytest
+        pytest tests
+
+    - name: Archive test reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports
+        path: reports/
