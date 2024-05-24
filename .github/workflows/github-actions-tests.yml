@@ -37,8 +37,7 @@ jobs:
     - name: Run tests with pytest
       run: |
         . venv/bin/activate
-        cd tests
-        pytest tests
+        pytest .\test_checks.py
 
     - name: Archive test reports
       if: always()
