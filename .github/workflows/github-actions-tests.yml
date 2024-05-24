@@ -14,7 +14,7 @@ jobs:
 
     services:
       selenium:
-        image: selenium/standalone-firefox:latest
+        image: selenium/standalone-chrome:latest
         ports:
           - 4444:4444
 
@@ -35,10 +35,12 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run tests with pytest
+      env:
+        SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
       run: |
         . venv/bin/activate
         cd tests
-        pytest test_checks.py
+        pytest tests --driver Remote --capability browserName chrome
 
     - name: Archive test reports
       if: always()
